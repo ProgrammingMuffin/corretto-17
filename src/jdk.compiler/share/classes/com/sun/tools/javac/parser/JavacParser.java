@@ -451,6 +451,7 @@ public class JavacParser implements Parser {
             count = 0;
             errorPos = token.pos;
         }
+
     }
 
     /** If next input token matches given token, skip it, otherwise report
@@ -912,6 +913,19 @@ public class JavacParser implements Parser {
         if (token.kind == QUES) {
             int pos = token.pos;
             nextToken();
+            // option chaining
+            if (token.kind == DOT) {
+                accept(DOT);
+//                t = toP(F.at(token.pos).Ident(ident()));
+                System.out.println("token is: " + token.kind);
+                nextToken();
+                System.out.println("token is: " + token.kind);
+                if (token.kind == DOT) {
+                    accept(DOT);
+                    F.at(pos).OptionChain(t, ident());
+                }
+            }
+            // ternary
             JCExpression t1 = term();
             accept(COLON);
             JCExpression t2 = term1();
@@ -1151,11 +1165,12 @@ public class JavacParser implements Parser {
         List<JCExpression> typeArgs = typeArgumentsOpt(EXPR);
         switch (token.kind) {
         case QUES:
+            System.out.println("QUES is handled term3 bruh");
             if ((mode & TYPE) != 0 && (mode & (TYPEARG|NOPARAMS)) == TYPEARG) {
                 selectTypeMode();
                 return typeArgument();
-            } else
-                return illegal();
+            }
+            return illegal();
         case PLUSPLUS: case SUBSUB: case BANG: case TILDE: case PLUS: case SUB:
             if (typeArgs == null && (mode & EXPR) != 0) {
                 TokenKind tk = token.kind;
