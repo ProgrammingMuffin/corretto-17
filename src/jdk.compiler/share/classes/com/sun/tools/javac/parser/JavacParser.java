@@ -240,12 +240,12 @@ public class JavacParser implements Parser {
      *     mode = TYPEARG     : type argument
      *     mode |= NOLAMBDA   : lambdas are not allowed
      */
-    protected static final int EXPR = 0x1;
-    protected static final int TYPE = 0x2;
-    protected static final int NOPARAMS = 0x4;
-    protected static final int TYPEARG = 0x8;
-    protected static final int DIAMOND = 0x10;
-    protected static final int NOLAMBDA = 0x20;
+    protected static final int EXPR = 0x1; //      00001
+    protected static final int TYPE = 0x2; //      00010
+    protected static final int NOPARAMS = 0x4; //  00100
+    protected static final int TYPEARG = 0x8; //   01000
+    protected static final int DIAMOND = 0x10; //  01010
+    protected static final int NOLAMBDA = 0x20; // 10100
 
     protected void selectExprMode() {
         mode = (mode & NOLAMBDA) | EXPR;
@@ -916,14 +916,12 @@ public class JavacParser implements Parser {
             // option chaining
             if (token.kind == DOT) {
                 accept(DOT);
-//                t = toP(F.at(token.pos).Ident(ident()));
-                System.out.println("token is: " + token.kind);
-                nextToken();
-                System.out.println("token is: " + token.kind);
-                if (token.kind == DOT) {
-                    accept(DOT);
-                    F.at(pos).OptionChain(t, ident());
-                }
+                var ident = ident();
+                JCExpression returnable = F.at(pos).OptionChain(t, ident);
+                    // F.at(pos).If(
+                    //     F.at(pos).Parens(F.at(pos).Binary(optag(TokenKind.EQEQ), F.at(pos).Literal(TypeTag.INT, null), t)),
+                    //     F.at(pos).Exec(F.at(pos).Assign(F.at(pos).Ident(ident), null)), null));
+                return term1Rest(returnable);
             }
             // ternary
             JCExpression t1 = term();
