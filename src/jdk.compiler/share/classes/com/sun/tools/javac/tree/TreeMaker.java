@@ -518,13 +518,6 @@ public class TreeMaker implements JCTree.Factory {
         return tree;
     }
 
-    public JCFieldAccess OptionChain(JCExpression selected, Name selector) {
-        JCFieldAccess tree = new JCFieldAccess(selected, selector, null);
-        tree.optionChain = true;
-        tree.pos = pos;
-        return tree;
-    }
-
     public JCMemberReference Reference(JCMemberReference.ReferenceMode mode, Name name,
             JCExpression expr, List<JCExpression> typeargs) {
         JCMemberReference tree = new JCMemberReference(mode, name, expr, typeargs);

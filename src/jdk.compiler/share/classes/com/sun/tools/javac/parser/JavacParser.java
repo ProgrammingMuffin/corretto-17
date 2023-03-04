@@ -917,10 +917,9 @@ public class JavacParser implements Parser {
             if (token.kind == DOT) {
                 accept(DOT);
                 var ident = ident();
-                JCExpression returnable = F.at(pos).OptionChain(t, ident);
-                    // F.at(pos).If(
-                    //     F.at(pos).Parens(F.at(pos).Binary(optag(TokenKind.EQEQ), F.at(pos).Literal(TypeTag.INT, null), t)),
-                    //     F.at(pos).Exec(F.at(pos).Assign(F.at(pos).Ident(ident), null)), null));
+                JCExpression returnable = F.at(pos).Conditional(
+                        F.at(pos).Parens(F.at(pos).Binary(optag(TokenKind.EQEQ), F.at(pos).Literal(TypeTag.BOT, null), t)),
+                        F.at(pos).Literal(TypeTag.BOT, null), F.at(pos).Select(t, ident));
                 return term1Rest(returnable);
             }
             // ternary

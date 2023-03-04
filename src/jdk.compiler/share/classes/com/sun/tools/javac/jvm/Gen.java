@@ -2306,15 +2306,6 @@ public class Gen extends JCTree.Visitor {
 
         Symbol ssym = TreeInfo.symbol(tree.selected);
 
-        // Are we option chaining?
-        if (tree.optionChain) {
-            Item base = items.makeStaticItem(ssym);
-            base.load();
-            code.emitop2(198, 0);
-            tree.selected.accept(this);
-            return;
-        }
-
         // Are we selecting via super?
         boolean selectSuper =
             ssym != null && (ssym.kind == TYP || ssym.name == names._super);

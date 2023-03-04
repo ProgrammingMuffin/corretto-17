@@ -2435,8 +2435,6 @@ public abstract class JCTree implements Tree, Cloneable, DiagnosticPosition {
      * Selects through packages and classes
      */
     public static class JCFieldAccess extends JCExpression implements MemberSelectTree {
-        /** Option chain enable flag */
-        public boolean optionChain;
         /** selected Tree hierarchy */
         public JCExpression selected;
         /** name of field to select thru */
