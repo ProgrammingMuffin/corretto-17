@@ -804,12 +804,13 @@ public class Operators {
     }
 
     OperatorSymbol lookupBinaryOp(Predicate<OperatorSymbol> applicabilityTest) {
-        return binaryOperators.values().stream()
-                .flatMap(List::stream)
-                .map(helper -> helper.doLookup(applicabilityTest))
-                .distinct()
-                .filter(sym -> sym != noOpSymbol)
-                .findFirst().get();
+        OperatorSymbol binSym = binaryOperators.values().stream()
+        .flatMap(List::stream)
+        .map(helper -> helper.doLookup(applicabilityTest))
+        .distinct()
+        .filter(sym -> sym != noOpSymbol)
+        .findFirst().get();
+        return binSym; 
     }
 
     /**

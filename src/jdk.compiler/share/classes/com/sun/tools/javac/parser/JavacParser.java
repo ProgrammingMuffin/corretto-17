@@ -240,12 +240,12 @@ public class JavacParser implements Parser {
      *     mode = TYPEARG     : type argument
      *     mode |= NOLAMBDA   : lambdas are not allowed
      */
-    protected static final int EXPR = 0x1;
-    protected static final int TYPE = 0x2;
-    protected static final int NOPARAMS = 0x4;
-    protected static final int TYPEARG = 0x8;
-    protected static final int DIAMOND = 0x10;
-    protected static final int NOLAMBDA = 0x20;
+    protected static final int EXPR = 0x1; //      00001
+    protected static final int TYPE = 0x2; //      00010
+    protected static final int NOPARAMS = 0x4; //  00100
+    protected static final int TYPEARG = 0x8; //   01000
+    protected static final int DIAMOND = 0x10; //  01010
+    protected static final int NOLAMBDA = 0x20; // 10100
 
     protected void selectExprMode() {
         mode = (mode & NOLAMBDA) | EXPR;
@@ -451,6 +451,7 @@ public class JavacParser implements Parser {
             count = 0;
             errorPos = token.pos;
         }
+
     }
 
     /** If next input token matches given token, skip it, otherwise report
@@ -912,6 +913,16 @@ public class JavacParser implements Parser {
         if (token.kind == QUES) {
             int pos = token.pos;
             nextToken();
+            // option chaining
+            if (token.kind == DOT) {
+                accept(DOT);
+                var ident = ident();
+                JCExpression returnable = F.at(pos).Conditional(
+                        F.at(pos).Parens(F.at(pos).Binary(optag(TokenKind.EQEQ), F.at(pos).Literal(TypeTag.BOT, null), t)),
+                        F.at(pos).Literal(TypeTag.BOT, null), F.at(pos).Select(t, ident));
+                return term1Rest(returnable);
+            }
+            // ternary
             JCExpression t1 = term();
             accept(COLON);
             JCExpression t2 = term1();
@@ -1154,8 +1165,8 @@ public class JavacParser implements Parser {
             if ((mode & TYPE) != 0 && (mode & (TYPEARG|NOPARAMS)) == TYPEARG) {
                 selectTypeMode();
                 return typeArgument();
-            } else
-                return illegal();
+            }
+            return illegal();
         case PLUSPLUS: case SUBSUB: case BANG: case TILDE: case PLUS: case SUB:
             if (typeArgs == null && (mode & EXPR) != 0) {
                 TokenKind tk = token.kind;
