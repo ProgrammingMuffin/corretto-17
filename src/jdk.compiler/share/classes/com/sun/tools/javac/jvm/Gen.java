@@ -862,7 +862,7 @@ public class Gen extends JCTree.Visitor {
     public Item genExpr(JCTree tree, Type pt) {
         Type prevPt = this.pt;
         try {
-            if (tree.type != null && tree.type.constValue() != null) {
+            if (tree.type.constValue() != null) {
                 // Short circuit any expressions which are constants
                 tree.accept(classReferenceVisitor);
                 checkStringConstant(tree.pos(), tree.type.constValue());
@@ -2143,9 +2143,6 @@ public class Gen extends JCTree.Visitor {
 
     public void visitBinary(JCBinary tree) {
         OperatorSymbol operator = tree.operator;
-        if (operator == null) {
-            System.out.println("operator symbol data: " + tree.getRightOperand().getKind());
-        }
         if (operator.opcode == string_add) {
             result = concat.makeConcat(tree);
         } else if (tree.hasTag(AND)) {

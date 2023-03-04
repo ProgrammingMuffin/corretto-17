@@ -146,11 +146,6 @@ public interface Tree {
         MEMBER_SELECT(MemberSelectTree.class),
 
         /**
-         * Used for instances of {@link MemberSelectTree}.
-         */
-        OPTION_CHAIN(MemberSelectTree.class),
-
-        /**
          * Used for instances of {@link MemberReferenceTree}.
          */
         MEMBER_REFERENCE(MemberReferenceTree.class),

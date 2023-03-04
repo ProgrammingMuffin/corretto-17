@@ -810,9 +810,6 @@ public class Operators {
         .distinct()
         .filter(sym -> sym != noOpSymbol)
         .findFirst().get();
-        if (binSym == null) {
-            System.out.println("wtf bruv lower");
-        }
         return binSym; 
     }
 

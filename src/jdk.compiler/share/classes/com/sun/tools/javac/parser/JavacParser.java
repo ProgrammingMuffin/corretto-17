@@ -1162,7 +1162,6 @@ public class JavacParser implements Parser {
         List<JCExpression> typeArgs = typeArgumentsOpt(EXPR);
         switch (token.kind) {
         case QUES:
-            System.out.println("QUES is handled term3 bruh");
             if ((mode & TYPE) != 0 && (mode & (TYPEARG|NOPARAMS)) == TYPEARG) {
                 selectTypeMode();
                 return typeArgument();
